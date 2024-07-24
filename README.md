@@ -1,30 +1,27 @@
-# React + TypeScript + Vite
+# Tic Tac Toe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+- ```jsx
+  <Square value={squares[0]} onSquareClick={handleClick(0)} />
+  ```
 
-Currently, two official plugins are available:
+  - `handleClick(0)` 호출은 보드 컴포넌트 렌더링의 일부
+  - `handleClick(0)`은 `setSquares`를 호출하여 보드 컴포넌트의 state를 변경하기 때문에 보드 컴포넌트 전체가 다시 렌더링
+  - 이 과정에서 `handleClick(0)`은 다시 실행되기 때문에 무한 루프에 빠지게 됨
+- 일반적으로 데이터를 변경하는 방법에는 두 가지가 있음
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json', './tsconfig.app.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
-```
-
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+  - 첫 번째 방법은 데이터의 값을 직접 변경하여 데이터를 변형하는 것
+  - 두 번째 방법은 원하는 변경 사항이 있는 새 복사본으로 데이터를 대체 (불변성 유지)
+    - 불변성의 장점
+      - 기본적으로 부모 컴포넌트의 state가 변경되면 모든 자식 컴포넌트가 자동으로 다시 렌더링됨
+      - 여기에는 변경 사항이 없는 자식 컴포넌트도 포함
+      - 리렌더링 자체가 사용자에게 보이는 것은 아니지만 성능상의 이유로 트리의 영향을 받지 않는 부분의 리렌더링을 피하는 것이 좋음
+      - 불변성을 사용하면 컴포넌트가 데이터의 변경 여부를 저렴한 비용으로 판단 가능
+- key 설정하기
+  - key는 각 React가 각 컴포넌트를 구별할 수 있도록 하여 컴포넌트가 다시 렌더링 될 때 React가 해당 컴포넌트의 state를 유지할 수 있게 함
+  - 컴포넌트의 key가 변하면 컴포넌트는 제거되고 새로운 state와 함께 다시 생성됨
+  - 엘리먼트가 생성되면 React는 key 프로퍼티를 추출하여 반환되는 엘리먼트에 직접 key를 저장
+  - key가 props로 전달되는 것처럼 보일 수 있지만, React는 자동으로 key를 사용해 업데이트할 컴포넌트를 결정
+  - key가 지정되지 않은 경우, React는 경고를 표시하며 배열의 인덱스를 기본 key로 사용
+  - 배열 인덱스를 key로 사용하면 리스트 항목의 순서를 바꾸거나 항목을 추가/제거할 때 문제가 발생
+  - 명시적으로 key={i}를 전달하면 경고는 사라지지만 배열의 인덱스를 사용할 때와 같은 문제가 발생하므로 대부분은 추천하지 않음
+  - key는 전역적으로 고유할 필요는 없으며 컴포넌트와 해당 컴포넌트의 형제 컴포넌트 사이에서만 고유하면 됨

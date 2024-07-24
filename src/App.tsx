@@ -1,9 +1,9 @@
-import './App.css'
+import { GameComponent } from './components/GameComponent'
 
 function App() {
   return (
     <>
-      <div>Hello World</div>
+    <GameComponent />
     </>
   )
 }
